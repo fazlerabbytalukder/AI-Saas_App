@@ -33,6 +33,9 @@
 //   return cached.conn;
 // };
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-var */
+
 import mongoose, { Mongoose } from "mongoose";
 
 const MONGODB_URL = process.env.MONGODB_URL;
