@@ -18,8 +18,9 @@ import {
   defaultValues,
   transformationTypes,
 } from "@/constants";
-import { AspectRatioKey } from "@/lib/utils";
-import { useState } from "react";
+import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 import { Button } from "../ui/button";
 import { CustomField } from "./CustomField";
 
@@ -46,8 +47,8 @@ const TransformationForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTransforming, setIsTransforming] = useState(false);
   const [transformationConfig, setTransformationConfig] = useState(config);
-  //   const [isPending, startTransition] = useTransition()
-  //   const router = useRouter()
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const initialValues =
     data && action === "Update"
@@ -75,15 +76,15 @@ const TransformationForm = ({
     value: string,
     onChangeField: (value: string) => void
   ) => {
-    // const imageSize = aspectRatioOptions[value as AspectRatioKey]
-    // setImage((prevState: any) => ({
-    //   ...prevState,
-    //   aspectRatio: imageSize.aspectRatio,
-    //   width: imageSize.width,
-    //   height: imageSize.height,
-    // }))
-    // setNewTransformation(transformationType.config);
-    // return onChangeField(value)
+    const imageSize = aspectRatioOptions[value as AspectRatioKey];
+    setImage((prevState: any) => ({
+      ...prevState,
+      aspectRatio: imageSize.aspectRatio,
+      width: imageSize.width,
+      height: imageSize.height,
+    }));
+    setNewTransformation(transformationType.config);
+    return onChangeField(value);
   };
 
   const onInputChangeHandler = (
@@ -92,27 +93,27 @@ const TransformationForm = ({
     type: string,
     onChangeField: (value: string) => void
   ) => {
-    // debounce(() => {
-    //   setNewTransformation((prevState: any) => ({
-    //     ...prevState,
-    //     [type]: {
-    //       ...prevState?.[type],
-    //       [fieldName === 'prompt' ? 'prompt' : 'to' ]: value
-    //     }
-    //   }))
-    // }, 1000)();
-    // return onChangeField(value)
+    debounce(() => {
+      setNewTransformation((prevState: any) => ({
+        ...prevState,
+        [type]: {
+          ...prevState?.[type],
+          [fieldName === "prompt" ? "prompt" : "to"]: value,
+        },
+      }));
+    }, 1000)();
+    return onChangeField(value);
   };
 
   const onTransformHandler = async () => {
-    // setIsTransforming(true)
-    // setTransformationConfig(
-    //   deepMergeObjects(newTransformation, transformationConfig)
-    // )
-    // setNewTransformation(null)
-    // startTransition(async () => {
-    //   await updateCredits(userId, creditFee)
-    // })
+    setIsTransforming(true);
+    setTransformationConfig(
+      deepMergeObjects(newTransformation, transformationConfig)
+    );
+    setNewTransformation(null);
+    startTransition(async () => {
+      // await updateCredits(userId, creditFee)
+    });
   };
 
   return (
