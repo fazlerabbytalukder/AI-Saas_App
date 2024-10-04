@@ -19,7 +19,6 @@ import { Button } from "../ui/button";
 import { IImage } from "@/lib/database/models/image.modal";
 
 export const Collection = ({
-  hasSearch = false,
   images,
   totalPages = 1,
   page,
@@ -27,7 +26,6 @@ export const Collection = ({
   images: IImage[];
   totalPages?: number;
   page: number;
-  hasSearch?: boolean;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
