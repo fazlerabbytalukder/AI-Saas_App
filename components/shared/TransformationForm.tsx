@@ -24,7 +24,7 @@ import { updateCredits } from "@/lib/actions/user.action";
 import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils";
 import { getCldImageUrl } from "next-cloudinary";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Button } from "../ui/button";
 import { CustomField } from "./CustomField";
 import { InsufficientCreditsModal } from "./InsufficientCreditsModal";
@@ -184,6 +184,12 @@ const TransformationForm = ({
       await updateCredits(userId, creditFee);
     });
   };
+
+  useEffect(() => {
+    if (image && (type === "restore" || type === "removeBackground")) {
+      setNewTransformation(transformationType.config);
+    }
+  }, [image, transformationType.config, type]);
 
   return (
     <Form {...form}>
