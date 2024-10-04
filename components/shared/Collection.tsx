@@ -17,7 +17,6 @@ import { formUrlQuery } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 import { IImage } from "@/lib/database/models/image.modal";
-import { Search } from "./Search";
 
 export const Collection = ({
   hasSearch = false,
@@ -50,7 +49,7 @@ export const Collection = ({
     <>
       <div className="collection-heading">
         <h2 className="h2-bold text-dark-600">Recent Edits</h2>
-        {hasSearch && <Search />}
+        {/* {hasSearch && <Search />} */}
       </div>
 
       {images.length > 0 ? (
